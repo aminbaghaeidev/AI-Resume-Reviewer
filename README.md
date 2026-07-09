@@ -8,6 +8,8 @@ ResumeAI is a Streamlit app that uses Large Language Models (LLMs) to parse a re
 ---
 
 ***Live demo available on Streamlit 👇***
+
+
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://resumereviewerllm.streamlit.app/)
 
 ---

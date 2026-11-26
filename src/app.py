@@ -106,28 +106,43 @@ def display_analysis():
     col1, col2 = st.columns(2)
     with col1:
         st.info(":x: **Original**")
-        current_section_data = st.session_state.resume_data[current_section]
-        st.info(format_resume({current_section: current_section_data}))
+        original_data = st.session_state.resume_data[current_section]
+        st.info(format_resume({current_section: original_data}))
+    review_data = st.session_state.review_data or {}
+    review_section = review_data.get(current_section)
+    if review_section is None:
+        normalized = {
+            str(k).strip().lower().replace(" ", "_"): v
+            for k, v in review_data.items()
+        }
+        review_section = normalized.get(current_section)
+
     with col2:
         st.success(":white_check_mark: **Revised**")
-        current_section_data = st.session_state.review_data[current_section]
-        impact_level = current_section_data["impact_level"]
-        revision_suggestion = current_section_data["revision_suggestion"]
-        revised_content = current_section_data["revised_content"]
-        st.success(format_resume({current_section: revised_content}))
+        if not isinstance(review_section, dict):
+            st.warning("No review was returned for this section.")
+        else:
+            revised_content = review_section.get("revised_content")
+            st.success(format_resume({current_section: revised_content}))
 
-    with revision_suggestion_placeholder.expander(
-        "Revision Suggestions", expanded=True
-    ):
-        if impact_level == "Low":
-            st.info(f"Impact Level: {impact_level}")
-        elif impact_level == "Medium":
-            st.warning(f"Impact Level: {impact_level}")
-        elif impact_level == "High":
-            st.error(f"Impact Level: {impact_level}")
+    if isinstance(review_section, dict):
+        impact_level = str(review_section.get("impact_level", "Low")).strip().capitalize()
+        suggestions = review_section.get("revision_suggestion") or []
+        if isinstance(suggestions, str):
+            suggestions = [suggestions]
 
-        for suggestion in revision_suggestion:
-            st.markdown(f"- {suggestion}")
+        with revision_suggestion_placeholder.expander(
+            "Revision Suggestions", expanded=True
+        ):
+            if impact_level == "Low":
+                st.info(f"Impact Level: {impact_level}")
+            elif impact_level == "Medium":
+                st.warning(f"Impact Level: {impact_level}")
+            elif impact_level == "High":
+                st.error(f"Impact Level: {impact_level}")
+
+            for suggestion in suggestions:
+                st.markdown(f"- {suggestion}")
 
 
 if __name__ == "__main__":

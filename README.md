@@ -1,7 +1,7 @@
 ![ResumeAI Screenshot](img/Screenshot.png)
 
 
-# 📄 ResumeAI — Resume Parser and Reviewer
+# 📄 Resume Reviewer
 
 ResumeAI is a Streamlit app that uses Large Language Models (LLMs) to parse a resume, review it section by section, and suggest improvements — optionally tailored to a specific job description.
 

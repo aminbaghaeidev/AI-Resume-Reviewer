@@ -12,11 +12,14 @@ from prompts import (
 
 from utils.yaml import extract_yaml
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(
+    api_key=os.getenv("API_KEY"),
+    base_url="https://coarena.ai/api/v1"
+)
 
 
 @st.cache_data(show_spinner="Analyzing...")
-def call_llm(prompt, model="gpt-5.4-mini"):
+def call_llm(prompt, model="gemini-3-8-flash"):
     response = client.chat.completions.create(
         model=model,
         messages=[

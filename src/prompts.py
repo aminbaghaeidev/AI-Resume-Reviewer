@@ -91,15 +91,11 @@ LLM_YAML_PARSE_PROMPT = """
 """
 
 REVIEW_OUTPUT_SCHEMA = """
-section_name_1:
-  impact_level: string
-  revised_content: string | list | dict
-  revision_suggestion: list[string]
-section_name_2:
-  impact_level: string
-  revised_content: string | list | dict
-  revision_suggestion: list[string]
-...
+<exact_top_level_key_from_input>:
+  impact_level: "Low" | "Medium" | "High"
+  revised_content: <same structure as the original section>
+  revision_suggestion:
+    - "string"
 """
 
 RESUME_REVIEW_PROMPT = """
@@ -126,6 +122,10 @@ RESUME_REVIEW_PROMPT = """
 
 - Please provide the output strictly in the above YAML format, without any additional explanations or text.
 - Make sure to add double quotes around the values that are strings. This is important for the YAML parser.
+- Use EXACTLY the same top-level keys as the input YAML (for example: personal_info, summary, work_experience, education, skills) as the section names. Do not rename, translate, merge, or add sections.
+- Include every top-level key that exists in the input YAML.
+- Keep `revised_content` in the same structure as the original section (same fields, same types).
+- Do not wrap the output in markdown code fences.
 """
 
 JOB_DESCRIPTION_REVIEW_PROMPT = """
@@ -154,4 +154,8 @@ JOB_DESCRIPTION_REVIEW_PROMPT = """
 
 - Please provide the output strictly in the above YAML format, without any additional explanations or text.
 - Make sure to add double quotes around the values that are strings. This is important for the YAML parser.
+- Use EXACTLY the same top-level keys as the input YAML (for example: personal_info, summary, work_experience, education, skills) as the section names. Do not rename, translate, merge, or add sections.
+- Include every top-level key that exists in the input YAML.
+- Keep `revised_content` in the same structure as the original section (same fields, same types).
+- Do not wrap the output in markdown code fences.
 """
